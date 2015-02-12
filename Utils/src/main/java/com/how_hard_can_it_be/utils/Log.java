@@ -1,0 +1,24 @@
+package com.how_hard_can_it_be.utils;
+
+/**
+ * Logging functions
+ * @author John Lusk
+ *
+ */
+public class Log
+{
+    public static void note( String aMsg)
+    {
+        System.err.println( "NOTE: " + aMsg);
+    }
+    
+    public static void warn( String aMsg)
+    {
+        System.err.println( "WARNING: " + aMsg);
+    }
+    
+    public static void error( String aMsg)
+    {
+        System.err.println( "ERROR: " + aMsg);        
+    }
+}

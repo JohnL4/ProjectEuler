@@ -1,0 +1,21 @@
+#!/bin/bash
+
+mainClass=com.how_hard_can_it_be.primes.App
+
+classPathElements=`cat classpath.txt | egrep -v '^[ 	]*#|^[ 	]*$'`
+classPath=
+for elt in $classPathElements; do
+    eval "elt=$elt"
+    if [ -r $elt ]; then
+        if [ "$classPath" = "" ]; then
+            :
+        else
+            classPath="${classPath}:"
+        fi
+        classPath="${classPath}${elt}"
+    else
+        echo "File not readable: \"$elt\""
+    fi
+done
+
+java -cp $classPath $mainClass "$@"

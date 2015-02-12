@@ -1,0 +1,6 @@
+# Classpath relative to root of project
+
+~/.m2/repository/args4j/args4j/2.0.29/args4j-2.0.29.jar
+target/amicablenumbers-1.0-SNAPSHOT.jar
+../Primes/target/Primes-1.0-SNAPSHOT.jar
+../Utils/target/utils-1.0-SNAPSHOT.jar
