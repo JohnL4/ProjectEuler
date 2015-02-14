@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mainClass=com.how_hard_can_it_be.amicablenumbers.App
+mainClass=com.how_hard_can_it_be.amicablenumbers.AmicableNumbersApp
 
 classPathElements=`cat classpath.txt | egrep -v '^[ 	]*#|^[ 	]*$'`
 classPath=

@@ -8,12 +8,13 @@ import org.kohsuke.args4j.CmdLineParser;
 import com.how_hard_can_it_be.amicablenumbers.Options;
 import com.how_hard_can_it_be.primes.Factor;
 import com.how_hard_can_it_be.primes.PrimeUtils;
+import com.how_hard_can_it_be.utils.Log;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class AmicableNumbersApp 
 {
     public static void main( String[] args )
     {
@@ -35,7 +36,7 @@ public class App
         if (goodCommandLine)
         {
             if (options.ceiling > 0)
-                System.err.println( String.format( "Will find all amicable numbers less than %d", options.ceiling));
+                Log.note( String.format( "Will find all amicable numbers less than %d", options.ceiling));
             if (options.numberToFactor > 3)
             {
                 
@@ -49,6 +50,10 @@ public class App
                         System.out.print( String.format( "%8d ^ %-8d ", factor.getFactor(), factor.getCount()));
                 }
                 System.out.println();
+            }
+            if (options.ceiling > 3)
+            {
+                List<Factor> factors = Amicable.allFactorsLessThan( options.ceiling);
             }
         }
     }
