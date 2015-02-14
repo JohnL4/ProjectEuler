@@ -16,9 +16,9 @@ public class Amicable
         
         List<Factor> primeFactorsList = PrimeUtils.factors( aNumber);
         
-        Log.note( String.format( "Found %d prime factors:", primeFactorsList.size()));
-        Factor.dump( System.out, primeFactorsList);
-        System.out.println();
+//        Log.note( String.format( "Found %d prime factors:", primeFactorsList.size()));
+//        Factor.dump( System.err, primeFactorsList);
+//        System.err.println();
         
         Factor[] primeFactor = primeFactorsList.toArray( new Factor[0]);
         Factor[] factorComponent = new Factor[ primeFactor.length];
@@ -31,10 +31,14 @@ public class Amicable
         do
         {
             long factor = makeFactor( factorComponent);
-            if (factor < aNumber) System.out.printf( "%8d", factor);
+            if (factor < aNumber)
+            {
+//                Log.note( String.format( "%d", factor));
+                retval.add( new Factor( factor, 1));
+            }
             increment( factorComponent, primeFactor);
         } while (! maxedOut( factorComponent, primeFactor));
-        System.out.println();
+//        System.out.println();
         
         return retval;
     }

@@ -23,8 +23,8 @@ public class PrimeUtils
     static public List<Factor> factors(long aNumberToFactor)
     {
         List<Factor> factors = new LinkedList<Factor>();
-        int rootNumber = (int) Math.floor( Math.sqrt( aNumberToFactor));
-        Log.note( String.format( "Root of %d is %d", aNumberToFactor, rootNumber));
+        int rootNumber = (int) Math.ceil( Math.sqrt( aNumberToFactor));
+//        Log.note( String.format( "Root of %d is %d", aNumberToFactor, rootNumber));
         if (primes == null || primes.length == 0 || primes[primes.length-1] < rootNumber)
         {
             if (primes == null || primes.length == 0)

@@ -35,26 +35,47 @@ public class AmicableNumbersApp
         }
         if (goodCommandLine)
         {
-            if (options.ceiling > 0)
-                Log.note( String.format( "Will find all amicable numbers less than %d", options.ceiling));
             if (options.numberToFactor > 3)
-            {
-                
-                List<Factor> factors = PrimeUtils.factors(options.numberToFactor);
-                System.out.println( String.format( "Found %d factors:", factors.size()));
-                for (Factor factor : factors)
-                {
-                    if (factor.getCount() == 1)
-                        System.out.print( String.format( "%8d%12s", factor.getFactor(), ""));
-                    else 
-                        System.out.print( String.format( "%8d ^ %-8d ", factor.getFactor(), factor.getCount()));
-                }
-                System.out.println();
-            }
-            if (options.ceiling > 3)
-            {
-                List<Factor> factors = Amicable.allFactorsLessThan( options.ceiling);
-            }
+                printPrimeFactors( options.numberToFactor);
+            if (options.ceiling > 1)
+                findAmicableNumbersLessThan( options.ceiling);
         }
+    }
+
+    private static void findAmicableNumbersLessThan( int aCeiling)
+    {
+        int[] sumFactors = new int[aCeiling + 1];
+        Log.note( String.format( "Will find all amicable numbers less than %d", aCeiling));
+        for (int i = 2; i <= aCeiling; i++)
+        {
+            List<Factor> factors = Amicable.allFactorsLessThan( i);
+            int sum = 0;
+            for (Factor factor : factors)
+            {
+                sum += factor.getFactor();
+            }
+            sumFactors[i] = sum;
+        }
+        for (int i = 2; i <= aCeiling; i++)
+            for (int j = i + 1; j <= aCeiling; j++)
+                if (sumFactors[i] == j && sumFactors[j] == i)
+                {
+//                    Log.note( String.format( "amicable: %6d and %6d", i, j));
+                    System.out.printf( "%d\n%d\n", i, j);
+                }
+    }
+
+    private static void printPrimeFactors( long aNumberToFactor)
+    {
+        List<Factor> factors = PrimeUtils.factors(aNumberToFactor);
+        System.out.println( String.format( "Found %d factors:", factors.size()));
+        for (Factor factor : factors)
+        {
+            if (factor.getCount() == 1)
+                System.out.print( String.format( "%8d%12s", factor.getFactor(), ""));
+            else 
+                System.out.print( String.format( "%8d ^ %-8d ", factor.getFactor(), factor.getCount()));
+        }
+        System.out.println();
     }
 }
