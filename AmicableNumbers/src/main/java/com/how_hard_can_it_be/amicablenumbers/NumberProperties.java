@@ -1,6 +1,6 @@
 package com.how_hard_can_it_be.amicablenumbers;
 
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,9 +8,14 @@ import com.how_hard_can_it_be.primes.Factor;
 import com.how_hard_can_it_be.primes.PrimeUtils;
 import com.how_hard_can_it_be.utils.Log;
 
-public class Amicable
+public class NumberProperties
 {
-    public static List<Factor> allFactorsLessThan( long aNumber)
+    /**
+     * Returns a list of all proper divisors of the given number.
+     * @param aNumber
+     * @return
+     */
+    public static List<Factor> properDivisorsOf( long aNumber)
     {
         List<Factor> retval = new LinkedList<Factor>();
         
@@ -43,6 +48,27 @@ public class Amicable
         return retval;
     }
 
+    public static EnumSet<NumberType> numberTypes( long aNumber)
+    {
+        EnumSet<NumberType> retval = EnumSet.allOf(NumberType.class);
+        List<Factor> divisors = properDivisorsOf( aNumber);
+        long factorSum = 0;
+        for (Factor factor : divisors)
+        {
+            factorSum += factor.getFactor();
+        }
+        NumberType numType;
+        if (factorSum < aNumber)
+            numType = NumberType.DEFICIENT;
+        else if (factorSum == aNumber)
+            numType = NumberType.PERFECT;
+        else
+            numType = NumberType.ABUNDANT;
+        retval = EnumSet.of( numType);
+//        Log.note( String.format( "For %d, factor sum = %d (%s)", aNumber, factorSum, numType));
+        return retval;
+    }
+    
     /**
      * Make a factor from the given factor components by multiplying them together.
      * @param aFactorComponent

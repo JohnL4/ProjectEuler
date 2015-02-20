@@ -1,24 +1,28 @@
 package com.how_hard_can_it_be.amicablenumbers;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
-import com.how_hard_can_it_be.amicablenumbers.Options;
+import com.how_hard_can_it_be.amicablenumbers.AmicableNumbersOptions;
 import com.how_hard_can_it_be.primes.Factor;
 import com.how_hard_can_it_be.primes.PrimeUtils;
 import com.how_hard_can_it_be.utils.Log;
 
 /**
- * Hello world!
+ * Do amicable and perfect numbers stuff.
  *
  */
 public class AmicableNumbersApp 
 {
     public static void main( String[] args )
     {
-        Options options = new Options();
+        AmicableNumbersOptions options = new AmicableNumbersOptions();
         CmdLineParser parser = new CmdLineParser( options);
         boolean goodCommandLine;
         try 
@@ -39,6 +43,19 @@ public class AmicableNumbersApp
                 printPrimeFactors( options.numberToFactor);
             if (options.ceiling > 1)
                 findAmicableNumbersLessThan( options.ceiling);
+            if (options.numberToType > 1)
+                printNumberType( options.numberToType);
+            if (options.numberToTypeLow > 1 && options.numberToTypeHigh > options.numberToTypeLow)
+            {
+                for (int n = options.numberToTypeLow; n <= options.numberToTypeHigh; n++)
+                    printNumberType( n);
+            }
+            if (options.perfectHigh > 1)
+                printNumbersLessThanOrEqualTo( options.perfectHigh, NumberType.PERFECT);
+            if (options.abundantHigh > 1)
+                printNumbersLessThanOrEqualTo( options.abundantHigh, NumberType.ABUNDANT);
+            if (options.notSumOfTwoAbundant)
+                printNumbersWhichCannotBeWrittenAsSumOfTwoAbundantNumbers();
         }
     }
 
@@ -48,7 +65,7 @@ public class AmicableNumbersApp
         Log.note( String.format( "Will find all amicable numbers less than %d", aCeiling));
         for (int i = 2; i <= aCeiling; i++)
         {
-            List<Factor> factors = Amicable.allFactorsLessThan( i);
+            List<Factor> factors = NumberProperties.properDivisorsOf( i);
             int sum = 0;
             for (Factor factor : factors)
             {
@@ -78,4 +95,60 @@ public class AmicableNumbersApp
         }
         System.out.println();
     }
+
+    private static void printNumberType( int aNumberToType)
+    {
+        EnumSet<NumberType> numberTypes = NumberProperties.numberTypes( aNumberToType);
+        System.out.printf( "Types for %d:\n", aNumberToType);
+        for (NumberType numberType : numberTypes)
+        {
+            System.out.printf( "\t%s\n", numberType.toString());
+        }
+    }
+    
+    private static void printNumbersLessThanOrEqualTo( int aNumber, NumberType aNumberType)
+    {
+        for (int n = 2; n <= aNumber; n++)
+        {
+            EnumSet<NumberType> numTypes = NumberProperties.numberTypes( n);
+            if (numTypes.contains( aNumberType))
+                System.out.printf(  "%8d", n);
+        }
+        System.out.println();
+    }
+
+    private static void printNumbersWhichCannotBeWrittenAsSumOfTwoAbundantNumbers()
+    {
+        Set<Integer> abundantSet = new HashSet<Integer>();
+        for (int n = 12; n <= 28123; n++ )
+            if (NumberProperties.numberTypes( n).contains( NumberType.ABUNDANT))
+                abundantSet.add( n);
+        
+        List<Integer> cannotBeWrittenAsSumOfTwoAbundantNumbers = new LinkedList<Integer>();
+        for (int n = 1; n <= 28123; n++)
+        {
+            boolean canBeWrittenAsSumOfTwoAbundantNumbers = false;
+            for (Integer i : abundantSet)
+            {
+                if (abundantSet.contains( n - i))
+                {
+                    canBeWrittenAsSumOfTwoAbundantNumbers = true;
+                    break;
+                }
+            }
+            if (canBeWrittenAsSumOfTwoAbundantNumbers) {}
+            else
+                cannotBeWrittenAsSumOfTwoAbundantNumbers.add( n);
+        }
+        
+        int sum = 0;
+        for (Integer i : cannotBeWrittenAsSumOfTwoAbundantNumbers)
+        {
+            sum += i;
+            System.out.printf( "%8d", i);
+        }
+        System.out.printf(  "\nSum = %d\n", sum);
+        
+    }
+
 }

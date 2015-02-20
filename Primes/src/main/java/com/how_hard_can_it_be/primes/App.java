@@ -17,7 +17,7 @@ public class App
 {
     public static void main( String[] args )
     {
-    	Options options = new Options();
+    	PrimesOptions options = new PrimesOptions();
     	CmdLineParser parser = new CmdLineParser( options);
     	boolean goodCommandLine;
     	try 
