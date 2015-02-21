@@ -1,0 +1,22 @@
+#!/bin/bash
+
+mainClass=com.how_hard_can_it_be.lattice.LatticeApp
+
+classPathElements=`cat classpath.txt | egrep -v '^[ 	]*#|^[ 	]*$'`
+classPath=
+for elt in $classPathElements; do
+    eval "elt=$elt"
+    if [ -r $elt ]; then
+        if [ "$classPath" = "" ]; then
+            :
+        else
+            classPath="${classPath}:"
+        fi
+        classPath="${classPath}${elt}"
+    else
+        echo "File not readable: \"$elt\""
+    fi
+done
+
+# echo java -cp $classPath $mainClass "$@"
+java -cp $classPath $mainClass "$@"

@@ -19,6 +19,7 @@
   	<module>Primes</module>
   	<module>AmicableNumbers</module>
   	<module>Utils</module>
-    <module></module>
+    <module/>
+    <module>lattice</module>
   </modules>
 </project>
