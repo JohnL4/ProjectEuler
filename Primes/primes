@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mainClass=com.how_hard_can_it_be.primes.App
+mainClass=com.how_hard_can_it_be.primes.PrimesApp
 
 classPathElements=`cat classpath.txt | egrep -v '^[ 	]*#|^[ 	]*$'`
 classPath=

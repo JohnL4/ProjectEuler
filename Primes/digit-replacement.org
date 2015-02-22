@@ -1,0 +1,25 @@
+* Manual Digit Replacement
+  
+  Number 1: uvwxyz
+  Number 2: npqrst
+  
+  Replacements:
+
+  | *template* | *count* | *equivalent when* |
+  | uvwxy*     |      10 | uvwxy0 = npqrs0   |
+  | uvwx*z     |      10 |                   |
+  | uvwx**     |     100 |                   |
+  | uvw*y*     |     100 |                   |
+  | uvw**z     |     100 |                   |
+  | uvw***     |    1000 |                   |
+  | uv*xyz     |      10 |                   |
+  | uv*xy*     |     100 |                   |
+  | uv*x**     |    1000 |                   |
+  | uv**yz     |     100 |                   |
+  | uv**y*     |    1000 |                   |
+  | uv***z     |    1000 | uv000z = np000t   |
+  | uv****     |   10000 |                   |
+  | u*wxyz     |      10 |                   |
+  | :          |         |                   |
+  | *vwxyz     |      10 | 0vwxyz = 0pqrst   |
+

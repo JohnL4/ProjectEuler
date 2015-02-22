@@ -13,6 +13,7 @@ import com.how_hard_can_it_be.utils.Log;
 public class PrimeUtils
 {
     static int[] primes;
+    private static PrimeFinder _primeFinder = new Eratosthenes();
 
     /**
      * Returns list of prime factors of aNumberToFactor.  Returned list will not include aNumberToFactor if it 
@@ -33,8 +34,7 @@ public class PrimeUtils
                 Log.note(String.format(
                         "\t\tCalculating new primes because primes[%d] = %d, which is less than %d (sqrt(%d))",
                         primes.length - 1, primes[primes.length - 1], rootNumber, aNumberToFactor));
-            PrimeFinder primeFinder = new Eratosthenes();
-            primes = primeFinder.primesNotGreaterThan( rootNumber * 10);
+            primes = _primeFinder.primesNotGreaterThan( rootNumber * 10);
             Log.note( String.format( "\t\tHighest prime found = %d", primes[primes.length - 1]));
         }
         long remainingToFactor = aNumberToFactor;

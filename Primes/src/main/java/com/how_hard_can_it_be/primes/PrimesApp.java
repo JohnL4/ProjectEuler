@@ -13,7 +13,7 @@ import org.kohsuke.args4j.CmdLineParser;
  * Hello world!
  *
  */
-public class App 
+public class PrimesApp 
 {
     public static void main( String[] args )
     {
