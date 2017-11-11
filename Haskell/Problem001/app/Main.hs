@@ -17,11 +17,11 @@ main = do
                                 -- definition.  To really understand this, you sort of have to read it from the bottom
                                 -- up.
       Set.toList $              -- Convert a set to a list.
-      Set.fromList              -- Convert a list to a set.  The point of converting a list to a set and then back again
+      Set.fromList $            -- Convert a list to a set.  The point of converting a list to a set and then back again
                                 -- is that we eliminate duplicates that way.
-      (multiplesOfLessThan 5 1000
+      multiplesOfLessThan 5 1000
       ++                        -- ...concatenated with...
-      multiplesOfLessThan 3 1000)
+      multiplesOfLessThan 3 1000
 
 -- | A list of multiples of n less than m
 multiplesOfLessThan n m =       -- More fun 'n' games
