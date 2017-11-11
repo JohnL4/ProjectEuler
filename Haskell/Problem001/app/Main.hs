@@ -24,10 +24,10 @@ main = do
                                 -- it a sorted list.  (NOTE: In future, might be better to do this with a Set instead,
                                 -- so we don't have to build complete lists.  Makes a difference when the lists are
                                 -- huge.)
-      (sort $                   -- Sort the following list, which is composed of...
-       multiplesOfLessThan 5 1000
-       ++                       -- ...concatenated with...
-       multiplesOfLessThan 3 1000)
+      sort $                    -- Sort the following list, which is composed of...
+      multiplesOfLessThan 5 1000
+      ++                        -- ...concatenated with...
+      multiplesOfLessThan 3 1000
 
 -- | A list of multiples of n less than m
 multiplesOfLessThan n m =       -- More fun 'n' games
