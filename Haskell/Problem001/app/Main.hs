@@ -45,6 +45,12 @@ multiplesOfLessThan n m =       -- More fun 'n' games
                                 -- various thunks we needed, since we got a number.  It's possible that we set up an
                                 -- entire evaluation tree and only collapse it when we actually print the results.  I'm
                                 -- not sure at this time how to measure that, or how to fix it.
+                                --
+                                -- Note that the docs for Data.Set say "Key arguments are evaluated to WHNF", which I
+                                -- take to mean that the keys for the set (which are the only things we care about) are
+                                -- NOT actually giant call trees, so space consumption should be minimized.  (I guess
+                                -- they'd have to be reduced somehow, in order to determine their equality with each
+                                -- other.)
   
 
   -- I really should turn this into literate Haskell.
