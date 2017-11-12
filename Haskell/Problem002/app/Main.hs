@@ -8,7 +8,7 @@ main = do
   print $ sum fibs
   where
     fibs = takeWhile (< 4000000)
-      $ filter (\x -> x `mod` 2 == 0)
+      $ filter (\x -> x `mod` 2 == 0) -- Lambda function, plus a 2-arg function turned into a binary operator with backtics.
       $ fibonaccis 
       -- [1..10]
 
