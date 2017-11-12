@@ -1,3 +1,6 @@
 * Project Euler Haskell Implementations
 
+  For getting started with =stack=, which is required (recommended, anyway) to build this stuff, see
+  http://web.how-hard-can-it-be.com/wiki/Wiki.jsp?page=ReReStartingHaskell
+
   
