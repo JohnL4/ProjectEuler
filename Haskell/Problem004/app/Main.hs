@@ -16,9 +16,22 @@ main = do
 -- If you have found some palindrome p and you are considering pairs of numbers (x1,x2) (where x1 >= x2) in constructing
 -- a larger palindrome, you don't need to consider x2's smaller than p/x1, since x1 * p/x1 = p.
 
-largestSquarePalindrome = maximum [ p^2 | p <- [999,998..1], isPalindrome (p^2) ] -- 698896
+largestSquarePalindrome = maximum [ p^2 | p <- [999,998..1], isPalindrome (p^2) ] -- 698896, or 836^2
 
-multiples = 1
+-- After above, define d3(n,m) := (m+836)*(n+836)−698896 (d3 was the third delta function I defined).
+--
+-- Solve d3(n,163) = 0 for n and you get -136.  The 163 comes from 999-836 = 163.  So, somewhere in the triangle defined
+-- by (836,836), (700,999), and (999,999) is the greatest palindrome.  All numbers outside this triangle are less than
+-- 836^2.
+--
+-- Actually, it's NOT a triangle because the edge from (836,836) to (700,999) isn't straight (why not? is it
+-- hyperbolic?).  So, I guess we should consider 700 to be our floor and cover all numbers above it.
+
+largestPalindrome = maximum $ [ (fst p) * (snd p)
+                              | p <- [ (x,y) | x <- [700..999], y <- [700..999] ], -- A list that is the Cartesian
+                                                                                   -- product of two other lists.
+                                isPalindrome $ (fst p) * (snd p) ]
+                                
 
 isPalindrome x =
   leftHalf x == (reverse $ rightHalf x)
@@ -26,7 +39,7 @@ isPalindrome x =
 leftHalf x =
   take halfLength (show x)
   where
-    halfLength = quot (length $ show x) 2
+    halfLength = quot (length $ show x) 2 -- 'quot' is integer division (quotient).
 
 rightHalf x =
   drop (halfLength + (if (n `mod` 2) == 1 then 1 else 0)) (show x)
