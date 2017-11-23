@@ -1,0 +1,114 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 13.04.0 ] */
+
+/* [wxMaxima: input   start ] */
+d3(n,m):=(836+n)*(836+m)-836^2;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(d3(n,m));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Find an expression that gives us m for a given n such that the delta will still be zero
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(d3(n,m)=0,m);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Make the solution a function, "m for n".
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+m4(n):= 836*n/(n+836);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Test. Back up one position on the x axis. (-1)
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+m4(-1);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Need to shift y more than 1 (+1).  Verify:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+d3(-1,1);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+d3(-1,2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+What's the biggest y-offset from 836 we can tolerate? 999-836.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+999-836;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+What x-offset will require that large a y-offset?
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(m4(n)=-163,n),numer;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Verify. Back x off by -136 and increase y the maximum (so... is (836-136)*(836+163) > 836^2 ?):
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+d3(-136,163);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+d3(-137,163);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Here's another way to do it, that doesn't require an alternative function like m4:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(d3(n,163)=0,n),numer;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+So, how did I know the relationship between n and m isn't linear? For starters, the function doesn't have a linear
+form, but also, if you plot it, it doesn't look like a straight line.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+plot2d(m4(n),[n,-136,0]);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+The real proof is in the derivative.  Straight line ==> constant derivative.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+diff(m4(n),n);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(m4(n),n),n);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+That ain't a constant, so the m4 function isn't linear.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+plot2d(diff(m4(n),n),[n,-136,0]);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
