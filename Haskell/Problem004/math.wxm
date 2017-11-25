@@ -2,13 +2,13 @@
 /* [ Created with wxMaxima version 15.04.0 ] */
 
 /* [wxMaxima: comment start ]
-Proof that, in the square multiplication table, the diagonal of squares describes a "ridge line" (imagine a roof),
-and as you "move off" the ridge, you go "downhill" (toward smaller numbers).
+TeX: Proof that, in the square multiplication table, the diagonal of squares describes a ``ridge line'' (imagine a roof),
+and as you ``move off'' the ridge, you go ``downhill'' (toward smaller numbers).
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: comment start ]
-So, for example, 900^2 = 810000, but moving off the ridge (perpendicularly), you get smaller numbers, so
-901*899 =...
+TeX: So, for example, $900^2 = 810000$, but moving off the ridge (perpendicularly), you get smaller numbers, so
+$901 \times 899 =$ \ldots
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -16,35 +16,30 @@ So, for example, 900^2 = 810000, but moving off the ridge (perpendicularly), you
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-...a smaller number. Generalized proof follows. Pick any (x,y) pair of integers and move any distance e along the
-southwest-northeast axis (where (1,1) is the top-left corner of the table).
+TeX: ...a smaller number. Generalized proof follows. Pick any $(x,x)$ pair of integers (i.e., a square on the ``ridge line''
+and move any distance e along the southwest-northeast axis (where $(1,1)$ is the top-left corner of the table).
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
-x*y-(x-e)*(y+e);
+x*x-(x-e)*(x+e);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: input   start ] */
-expand(x*y-(x-e)*(y+e));
+expand(x*x-(x-e)*(x+e));
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Or...
-   [wxMaxima: comment end   ] */
-
-/* [wxMaxima: input   start ] */
-factorsum(x*y-(x-e)*(y+e));
-/* [wxMaxima: input   end   ] */
-
-/* [wxMaxima: comment start ]
-If you think of positions BELOW the main diagonal and moving toward the southwest, so that e is a positive number and
-y is always greater than x, 
-then you always get positive numbers (i.e., x decreses and y increases).  The rest of this writeup assumes we're below
-that main diagonal.  (The logic is the same for above the diagonal, obviously, although signs change.)
+TeX: i.e., the difference between the starting point (the ridge line) and where you move to is always positive
+(the ridge line is always higher).
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: comment start ]
-And now, the d3 function I mentioned in the code comments:
+TeX: The rest of this writeup assumes we're below
+the main diagonal.  (The logic is the same for above the diagonal, obviously, although signs change.)
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+TeX: And now, the $\operatorname{d3}$ function I mentioned in the code comments:
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -56,7 +51,7 @@ ratsimp(d3(n,m));
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Find an expression that gives us m for a given n such that the delta will still be zero
+TeX: Find an expression that gives us $m$ for a given $n$ such that the delta will still be zero:
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -64,7 +59,7 @@ solve(d3(n,m)=0,m);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Make the solution a function, "m for n".
+TeX: Make the solution a function, ``$m$ for $n$''.
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -72,7 +67,7 @@ m4(n):= 836*n/(n+836);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Test. Back up one position on the x axis. (-1)
+TeX: Test. Back up one position on the $x$ axis. ($-1$)
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -80,7 +75,7 @@ m4(-1);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Need to shift y more than 1 (+1).  Verify:
+TeX: Need to shift $y$ more than $1$ ($+1$).  Verify:
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -92,7 +87,7 @@ d3(-1,2);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-What's the biggest y-offset from 836 we can tolerate? 999-836.
+TeX: What's the biggest $y$-offset from 836 we can tolerate? $999-836$.
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -100,7 +95,7 @@ What's the biggest y-offset from 836 we can tolerate? 999-836.
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-What x-offset will require that large a y-offset?
+TeX: What $x$-offset will require that large a $y$-offset?
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -108,7 +103,7 @@ solve(m4(n)=-163,n),numer;
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Verify. Back x off by -136 and increase y the maximum (so... is (836-136)*(836+163) > 836^2 ?):
+TeX: Verify. Back $x$ off by -136 and increase $y$ the maximum (so... is $(836-136) \times (836+163) > 836^2$?):
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -120,7 +115,7 @@ d3(-137,163);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-Here's another way to do it, that doesn't require an alternative function like m4:
+TeX: Here's another way to do it, that doesn't require an alternative function like $\operatorname{m4}$:
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -128,16 +123,16 @@ solve(d3(n,163)=0,n),numer;
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-So, how did I know the relationship between n and m isn't linear? For starters, the function doesn't have a linear
+TeX: So, how did I know the relationship between $n$ and $m$ isn't linear? For starters, the function doesn't have a linear
 form, but also, if you plot it, it doesn't look like a straight line.
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
-plot2d(m4(n),[n,-136,0]);
+wxplot2d(m4(n),[n,-136,0]);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-The real proof is in the derivative.  Straight line ==> constant derivative.
+TeX: The real proof is in the derivative.  A straight line implies a constant derivative.
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
@@ -149,15 +144,15 @@ ratsimp(diff(m4(n),n),n);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-That ain't a constant, so the m4 function isn't linear.
+TeX: That ain't a constant, so the $\operatorname{m4}$ function isn't linear.
    [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
-plot2d(diff(m4(n),n),[n,-136,0]);
+wxplot2d(diff(m4(n),n),[n,-136,0]);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: comment start ]
-So, never mind trying to be too fancy.  Just take all pairs in the triangle starting at (700,700) (which is 836 - 136)
+TeX: So, never mind trying to be too fancy.  Just take all pairs in the triangle starting at $(700,700)$ (which is $836 - 136$)
 and find the biggest palindrome.  Not super-elegant, but not TOO wasteful.
    [wxMaxima: comment end   ] */
 
