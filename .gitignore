@@ -3,3 +3,8 @@
 .settings
 target
 *~
+/Haskell/Problem004/.DS_Store
+/Haskell/Problem004/app/Main.hs.html
+*.aux
+*.log
+/Haskell/Problem004/math.tex

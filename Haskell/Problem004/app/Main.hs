@@ -31,10 +31,10 @@ largestSquarePalindrome = maximum [ p^2 | p <- ([999,998..1]::[Integer]), isPali
 -- Actually, it's NOT a triangle because the edge from (836,836) to (700,999) isn't straight (why not? is it
 -- hyperbolic?).  So, I guess we should consider 700 to be our floor and cover all numbers above it.
 
-largestPalindrome = maximum $ [ (fst p) * (snd p)
+largestPalindrome = maximum $ [ (fst p) * (snd p) -- 'fst' is first of a pair; 'snd', second.
                               -- A list that is the Cartesian product of two other lists.  Sort of.  It's really a
                               -- "triangular" Cartesian product.  Also note that I had to specify the type of one of the
-                              -- constants ("[Integer]" means "list of Integers"), since Haskell can't guess them.
+                              -- constants ('[Integer]' means "list of Integers"), since Haskell can't guess them.
                               | p <- [ (x,y) | x <- ([700..999]::[Integer]), y <- [x..999] ], 
                                 isPalindrome $ (fst p) * (snd p) ]
                                 
