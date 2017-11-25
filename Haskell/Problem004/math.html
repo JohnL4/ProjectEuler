@@ -55,8 +55,345 @@ td {
  <BODY>
 
 <!---------------------------------------------------------->
-<!--          Created with wxMaxima version 13.04.0         -->
+<!--          Created with wxMaxima version 15.04.0         -->
 <!---------------------------------------------------------->
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Proof that, in the square multiplication table, the diagonal of squares describes a "ridge line" (imagine a roof),</LI>and as you "move off" the ridge, you go "downhill" (toward smaller numbers).
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>So, for example, 900^2 = 810000, but moving off the ridge (perpendicularly), you get smaller numbers, so</LI>901*899 =...
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i2) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+901*899;
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_0.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>...a smaller number. Generalized proof follows. Pick any (x,y) pair of integers and move any distance e along the</LI>southwest-northeast axis (where (1,1) is the top-left corner of the table).
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i3) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+x*y-(x-e)*(y+e);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_1.png">
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i4) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+expand(x*y-(x-e)*(y+e));
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_2.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Or...
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i5) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+factorsum(x*y-(x-e)*(y+e));
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_3.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>If you think of positions BELOW the main diagonal and moving toward the southwest, so that e is a positive number and</LI>y is always greater than x, </LI>then you always get positive numbers (i.e., x decreses and y increases). &nbsp;The rest of this writeup assumes we're below</LI>that main diagonal. &nbsp;(The logic is the same for above the diagonal, obviously, although signs change.)
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>And now, the d3 function I mentioned in the code comments:
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i6) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+d3(n,m):=(836+n)*(836+m)-836^2;
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_4.png">
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i7) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+ratsimp(d3(n,m));
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_5.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Find an expression that gives us m for a given n such that the delta will still be zero
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i8) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+solve(d3(n,m)=0,m);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_6.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Make the solution a function, "m for n".
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i9) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+m4(n):= 836*n/(n+836);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_7.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Test. Back up one position on the x axis. (-1)
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i10) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+m4(-1);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_8.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Need to shift y more than 1 (+1). &nbsp;Verify:
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i11) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+d3(-1,1);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_9.png">
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i12) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+d3(-1,2);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_10.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>What's the biggest y-offset from 836 we can tolerate? 999-836.
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i13) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+999-836;
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_11.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>What x-offset will require that large a y-offset?
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i14) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+solve(m4(n)=-163,n),numer;
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_12.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Verify. Back x off by -136 and increase y the maximum (so... is (836-136)*(836+163) &gt; 836^2 ?):
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i15) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+d3(-136,163);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_13.png">
+</P>
+
+
+<!-- Code cell -->
+
+
+<P><TABLE><TR><TD>
+  <SPAN CLASS="prompt">
+(%i16) 
+  </SPAN></TD>
+  <TD><SPAN CLASS="input">
+d3(-137,163);
+  </SPAN></TD>
+</TR></TABLE>
+  <IMG ALT="Result" SRC="math_htmlimg/math_14.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>Here's another way to do it, that doesn't require an alternative function like m4:
+</P>
 
 
 <!-- Code cell -->
@@ -67,27 +404,10 @@ td {
 (%i17) 
   </SPAN></TD>
   <TD><SPAN CLASS="input">
-d3(n,m):=(836+n)*(836+m)-836^2;
+solve(d3(n,163)=0,n),numer;
   </SPAN></TD>
 </TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_0.png">
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i18) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-ratsimp(d3(n,m));
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_1.png">
+  <IMG ALT="Result" SRC="math_htmlimg/math_15.png">
 </P>
 
 
@@ -95,31 +415,7 @@ ratsimp(d3(n,m));
 
 
 <P CLASS="comment">
-Find an expression that gives us m for a given n such that the delta will still be zero
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i21) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-solve(d3(n,m)=0,m);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_2.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-Make the solution a function, "m for n".
+</LI>So, how did I know the relationship between n and m isn't linear? For starters, the function doesn't have a linear</LI>form, but also, if you plot it, it doesn't look like a straight line.
 </P>
 
 
@@ -131,212 +427,10 @@ Make the solution a function, "m for n".
 (%i22) 
   </SPAN></TD>
   <TD><SPAN CLASS="input">
-m4(n):= 836*n/(n+836);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_3.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-Test. Back up one position on the x axis. (-1)
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i25) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-m4(-1);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_4.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-Need to shift y more than 1 (+1).  Verify:
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i70) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-d3(-1,1);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_5.png">
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i27) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-d3(-1,2);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_6.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-What's the biggest y-offset from 836 we can tolerate? 999-836.
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i43) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-999-836;
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_7.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-What x-offset will require that large a y-offset?
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i49) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-solve(m4(n)=-163,n),numer;
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_8.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-Verify. Back x off by -136 and increase y the maximum (so... is (836-136)*(836+163) > 836^2 ?):
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i71) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-d3(-136,163);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_9.png">
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i72) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-d3(-137,163);
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_10.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-Here's another way to do it, that doesn't require an alternative function like m4:
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i53) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
-solve(d3(n,163)=0,n),numer;
-  </SPAN></TD>
-</TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_11.png">
-</P>
-
-
-<!-- Text cell -->
-
-
-<P CLASS="comment">
-So, how did I know the relationship between n and m isn't linear? For starters, the function doesn't have a linear<BR>
-form, but also, if you plot it, it doesn't look like a straight line.
-</P>
-
-
-<!-- Code cell -->
-
-
-<P><TABLE><TR><TD>
-  <SPAN CLASS="prompt">
-(%i64) 
-  </SPAN></TD>
-  <TD><SPAN CLASS="input">
 plot2d(m4(n),[n,-136,0]);
   </SPAN></TD>
 </TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_12.png">
+  <IMG ALT="Result" SRC="math_htmlimg/math_16.png">
 </P>
 
 
@@ -344,7 +438,7 @@ plot2d(m4(n),[n,-136,0]);
 
 
 <P CLASS="comment">
-The real proof is in the derivative.  Straight line ==> constant derivative.
+</LI>The real proof is in the derivative. &nbsp;Straight line ==&gt; constant derivative.
 </P>
 
 
@@ -353,14 +447,13 @@ The real proof is in the derivative.  Straight line ==> constant derivative.
 
 <P><TABLE><TR><TD>
   <SPAN CLASS="prompt">
-(%i74) 
+(%i19) 
   </SPAN></TD>
   <TD><SPAN CLASS="input">
 diff(m4(n),n);
   </SPAN></TD>
 </TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_13.png">
+  <IMG ALT="Result" SRC="math_htmlimg/math_17.png">
 </P>
 
 
@@ -369,14 +462,13 @@ diff(m4(n),n);
 
 <P><TABLE><TR><TD>
   <SPAN CLASS="prompt">
-(%i69) 
+(%i20) 
   </SPAN></TD>
   <TD><SPAN CLASS="input">
 ratsimp(diff(m4(n),n),n);
   </SPAN></TD>
 </TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_14.png">
+  <IMG ALT="Result" SRC="math_htmlimg/math_18.png">
 </P>
 
 
@@ -384,7 +476,7 @@ ratsimp(diff(m4(n),n),n);
 
 
 <P CLASS="comment">
-That ain't a constant, so the m4 function isn't linear.
+</LI>That ain't a constant, so the m4 function isn't linear.
 </P>
 
 
@@ -393,14 +485,21 @@ That ain't a constant, so the m4 function isn't linear.
 
 <P><TABLE><TR><TD>
   <SPAN CLASS="prompt">
-(%i68) 
+(%i23) 
   </SPAN></TD>
   <TD><SPAN CLASS="input">
 plot2d(diff(m4(n),n),[n,-136,0]);
   </SPAN></TD>
 </TR></TABLE>
-  <BR>
-  <IMG ALT="Result" SRC="math_img/math_15.png">
+  <IMG ALT="Result" SRC="math_htmlimg/math_19.png">
+</P>
+
+
+<!-- Text cell -->
+
+
+<P CLASS="comment">
+</LI>So, never mind trying to be too fancy. &nbsp;Just take all pairs in the triangle starting at (700,700) (which is 836 - 136)</LI>and find the biggest palindrome. &nbsp;Not super-elegant, but not TOO wasteful.
 </P>
 
  <HR>

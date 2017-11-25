@@ -1,5 +1,51 @@
 /* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
-/* [ Created with wxMaxima version 13.04.0 ] */
+/* [ Created with wxMaxima version 15.04.0 ] */
+
+/* [wxMaxima: comment start ]
+Proof that, in the square multiplication table, the diagonal of squares describes a "ridge line" (imagine a roof),
+and as you "move off" the ridge, you go "downhill" (toward smaller numbers).
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+So, for example, 900^2 = 810000, but moving off the ridge (perpendicularly), you get smaller numbers, so
+901*899 =...
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+901*899;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+...a smaller number. Generalized proof follows. Pick any (x,y) pair of integers and move any distance e along the
+southwest-northeast axis (where (1,1) is the top-left corner of the table).
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+x*y-(x-e)*(y+e);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+expand(x*y-(x-e)*(y+e));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Or...
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+factorsum(x*y-(x-e)*(y+e));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+If you think of positions BELOW the main diagonal and moving toward the southwest, so that e is a positive number and
+y is always greater than x, 
+then you always get positive numbers (i.e., x decreses and y increases).  The rest of this writeup assumes we're below
+that main diagonal.  (The logic is the same for above the diagonal, obviously, although signs change.)
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+And now, the d3 function I mentioned in the code comments:
+   [wxMaxima: comment end   ] */
 
 /* [wxMaxima: input   start ] */
 d3(n,m):=(836+n)*(836+m)-836^2;
@@ -109,6 +155,11 @@ That ain't a constant, so the m4 function isn't linear.
 /* [wxMaxima: input   start ] */
 plot2d(diff(m4(n),n),[n,-136,0]);
 /* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+So, never mind trying to be too fancy.  Just take all pairs in the triangle starting at (700,700) (which is 836 - 136)
+and find the biggest palindrome.  Not super-elegant, but not TOO wasteful.
+   [wxMaxima: comment end   ] */
 
 /* Maxima can't load/batch files which end with a comment! */
 "Created with wxMaxima"$
