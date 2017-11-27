@@ -52,7 +52,7 @@ neswDiagonals n =
          map (\offset -> getElem (offset+1) (startCol-offset) values)
          [0..startCol-1]        -- Offsets for row, column indexes.  Length of diagonal is startCol
       )
-  [n..(ncols values)]           -- Start at column n-1 and march across to the right
+  [n..(ncols values)]           -- Start at column n and march across to the right
   ++
   map (\startRow ->
          map (\offset -> getElem (startRow+offset) ((ncols values)-offset) values)
