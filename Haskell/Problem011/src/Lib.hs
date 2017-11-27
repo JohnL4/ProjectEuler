@@ -60,7 +60,7 @@ neswDiagonals n =
       )
   [2..(nrows values)-n+1]       -- Start at row 2 and march down to the bottom (well, almost)
 
-maxNWSE n = 0
+maxNWSE n = 0                   -- TODO: implement.
 
 -- | List of values in row-major order (index row first, then column (think "roll-call")).
 values :: Matrix Integer
