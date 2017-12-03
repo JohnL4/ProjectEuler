@@ -7,6 +7,7 @@ import qualified Data.Vector as V
 
 -- TODO: s/sum/product/
 
+-- | Return maximum product of n entries of 'values' taken in a straight line (horizontal, vertical, diagonal).
 maxStraightProduct :: Int -> Integer
 maxStraightProduct n =
   maximum [ maxHorizontals n,
@@ -18,13 +19,17 @@ maxStraightProduct n =
 maxHorizontals n =
   maximum $
   map (maxSubvector n) $
-  map (\r -> getRow r values) [1..(nrows values)] -- rows of 'values'
+  map (\r -> getRow r values) [1..(nrows values)] -- rows of 'values'.  This is basically a way to iterate over
+                                                  -- something without coding an "explicit" loop (forM_ or whatever):
+                                                  -- map a function over the things.
 
 -- | Maximum subvector (slice) of length 'n' of vector 'v'.
 maxSubvector n v =
   maximum $
   map product $
-  map (\i -> V.slice i n v) [1..(length v - n)]
+  map (\i -> V.slice i n v) [1..(length v - n)] -- This is another way to iterate if you want to write a straight "for
+                                                -- i=0 to n" type of loop.  Take the integers and map a function over
+                                                -- them, which might include indexing into another piece of data.
 
 -- | Similar to 'maxSubvector', but for lists.
 maxSublist n lst =
@@ -32,6 +37,7 @@ maxSublist n lst =
   map product $
   map (\i -> take n $ drop i lst) [0..(length lst - n)]
 
+-- | Similar to 'maxHorizontals'.
 maxVerticals n =
   maximum $
   map (maxSubvector n) $
@@ -47,6 +53,7 @@ maxNESW n =
   -- Actually, we probably can't do that in one operation.
   -- Slice across top first
 
+-- | Returns a list of "diagonal slices" of the 'values' matrix, slicing in the NE-SW direction.
 neswDiagonals n =
   map (\startCol ->
          map (\offset -> getElem (offset+1) (startCol-offset) values)
@@ -60,7 +67,7 @@ neswDiagonals n =
       )
   [2..(nrows values)-n+1]       -- Start at row 2 and march down to the bottom (well, almost)
 
-maxNWSE n = -- 0                   -- TODO: implement.
+maxNWSE n =
   maximum $
   map (maxSublist n) (nwseDiagonals n)
 
