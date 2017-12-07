@@ -1,0 +1,14 @@
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 1, pence5 = 0, pence2 = 0}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 2, pence2 = 0}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 1, pence2 = 3}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 1, pence2 = 2}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 1, pence2 = 1}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 1, pence2 = 0}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 5}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 4}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 3}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 2}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 1}
+PileOfCoins {pounds2 = 0, pound = 0, pence50 = 0, pence20 = 0, pence10 = 0, pence5 = 0, pence2 = 0}
+
+12 ways of making 11	(0.000014s sec)
