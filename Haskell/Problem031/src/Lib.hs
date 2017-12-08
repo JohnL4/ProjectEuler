@@ -57,6 +57,15 @@ changeCombinations amount =
   
 -- | The elegant solution from user 'mvz' at Project Euler, 28 Aug 2005 14:19.
 elegant :: [Integer] -> Integer -> Integer
-elegant _ 0 = 1
-elegant [c] _ = 1
-elegant (c:cs) s = sum $ map (elegant cs . (s-)) [0,c..s]
+elegant _ 0 = 1                 -- Only 1 way to make 0.
+elegant [c] _ = 1               -- If you only have one coin denomination, it's all 1s, and there's only one way to use
+                                --   it.
+elegant (c:cs) s =
+  sum $                         -- Sum up all the ways to make change...
+  map                           -- Ways to make change is built by mapping a function onto a list
+  (elegant cs . (s-))           -- By composing the function (elegant cs), which is how many ways there are to make
+                                --   change using all the OTHER coins available besides the highest denomination.  The
+                                --   change we'll be making will be for the sum (s-n) for all n in the range...
+  [0,c..s]                      -- [0..s], stepping by c (the biggest-denomination coin available).  So, we find all the
+                                --   ways to make change including all configurations of largest-denomination coins,
+                                --   from 0 to the largest possible number of big-denomination coins.
