@@ -1,0 +1,28 @@
+Pandigital 1-9 means 9 digits.
+
+1e9-1 is 9 digits.
+
+sqrt(1e9-1) is largest factor (is 31,623)
+
+* x * y = z
+
+  z can't be more than 1e9-1
+
+  if x > 31623, then y < 31623
+
+  if we try all x <- [1..31623 | noRepeatedDigits x 0], y <- [1..31623 | noRepeatedDigits y x], then
+  we need pandigital x y (x * y)
+
+  #+BEGIN_SRC haskell
+    noRepeatedDigits1 x = something
+
+    noRepeatedDigits2 x y =
+      noRepeatedDigits1 x
+      && noRepeatedDigits1 y
+      && noCommonDigits2 x y
+
+    pandigital x y =
+      foldr (&&) true $ map (1==) $ map snd $ freqDist x y
+      &&
+      9 == length $ freqDist x y
+  #+END_SRC 
