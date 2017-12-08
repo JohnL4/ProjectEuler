@@ -6,7 +6,7 @@ import Data.Time.Clock.POSIX
 
 -- | The amount we're trying to find different ways of making, using different coin denominations.
 amount :: Integer
-amount = 11
+amount = 200
 
 main :: IO ()
 main = do
@@ -21,6 +21,7 @@ main = do
   -- 73,000 entries, you can chunk up the work into building (# of cores) equal-sized (roughly) substrings and glue them
   -- together at the end.
 
+  {-
   printf "%s\n"                 -- Print a single string, which is coming up next.
     (foldr                      -- "fold": fold a list into one value (a single string, in this case), by applying a
                                 --   function to an accumulator.
@@ -40,10 +41,18 @@ main = do
                                 --   way to have fewer parentheses.
      changeCombinations amount) -- 3rd argument to 'foldr' is the result of calling the function 'changeCombinations'
                                 --   with argument 'amount'
+  -}
   
   startTime <- getPOSIXTime
   
   printf "%d ways of making %d" (length $ changeCombinations amount) amount
+
+  stopTime <- getPOSIXTime
+  printf "\t(%s sec)\n" $ show (stopTime - startTime)
+
+  startTime <- getPOSIXTime
+
+  printf "%d ways of making %d the elegant way" (elegant [200,100,50,20,10,5,2,1] amount) amount
 
   stopTime <- getPOSIXTime
   printf "\t(%s sec)\n" $ show (stopTime - startTime)

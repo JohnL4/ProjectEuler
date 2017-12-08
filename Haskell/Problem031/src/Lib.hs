@@ -1,5 +1,6 @@
 module Lib
-    ( changeCombinations
+    ( changeCombinations,
+      elegant
     ) where
 
 -- | A pile of coins making up the amount we want.  This isn't declaring data but a data TYPE.
@@ -54,3 +55,8 @@ changeCombinations amount =
     ]
   
   
+-- | The elegant solution from user 'mvz' at Project Euler, 28 Aug 2005 14:19.
+elegant :: [Integer] -> Integer -> Integer
+elegant _ 0 = 1
+elegant [c] _ = 1
+elegant (c:cs) s = sum $ map (elegant cs . (s-)) [0,c..s]
