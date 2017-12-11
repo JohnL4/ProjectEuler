@@ -16,10 +16,15 @@ sumPandigitalProducts =
   panDigitalTriples
 
 panDigitalTriples = [(x, y, x*y)
-                    | x <- [1..maxSqrt], noRepeatedDigitsOrZeros $ show x,
-                      y <- [100000000 `quot` x..1000000000 `quot` x], noRepeatedDigitsOrZeros $ show y,
+                    | x <- candidateMultiplicandsInRange 1 maxSqrt,
+                      y <- candidateMultiplicandsInRange (floor (1e8/x)) (ceiling (1e9/x)),
                       panDigital $ (show x) ++ (show y) ++ (show (x*y))
                     ]
+
+-- | A list of all the candidate multiplicands between 'low' and 'high': all numbers with neither repeating digits nor
+-- zeros.
+candidateMultiplicandsInRange low high =
+  [1..10]                       -- TODO
 
 -- | Return true iff x has no repeated digits AND no zeros.
 noRepeatedDigitsOrZeros s =
@@ -27,6 +32,7 @@ noRepeatedDigitsOrZeros s =
   &&
   (not $ elem '0' $ map fst $ freqDist s)
 
+-- | Return true iff the given string is pandigital (has each of the digits 1-9 exactly once).
 panDigital s =
   noRepeatedDigitsOrZeros s
   &&
