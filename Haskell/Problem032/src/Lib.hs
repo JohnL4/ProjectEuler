@@ -9,7 +9,11 @@ maxSqrt = ceiling $ sqrt 1e9
 
 sumPandigitalProducts =
   sum $
-  Prelude.map (\(_,_,z) -> z) panDigitalTriples
+  map
+  (\(_,_,z) -> z)  -- Stupid simple function that takes a triple and returns the 3rd element.  The cute trick here is
+                   -- that, since we don't care about the first two elements of the triple, we use '_' to specify them,
+                   -- which means we don't care even enough to name the value, so long as SOMETHING is there.
+  panDigitalTriples
 
 panDigitalTriples = [(x, y, x*y)
                     | x <- [1..maxSqrt], noRepeatedDigitsOrZeros $ show x,
@@ -19,7 +23,7 @@ panDigitalTriples = [(x, y, x*y)
 
 -- | Return true iff x has no repeated digits AND no zeros.
 noRepeatedDigitsOrZeros s =
-  (foldr (&&) True $ map (1 ==) $ Prelude.map snd $ freqDist s)
+  (foldr (&&) True $ map (1 ==) $ map snd $ freqDist s)
   &&
   (not $ elem '0' $ map fst $ freqDist s)
 
@@ -33,5 +37,5 @@ panDigital s =
 freqDist :: String -> [(Char,Integer)]
 freqDist s =
   Map.toList $
-  Prelude.foldr (\ digit map -> Map.insertWith (+) digit 1 map) Map.empty $
+  foldr (\ digit map -> Map.insertWith (+) digit 1 map) Map.empty $
   s
