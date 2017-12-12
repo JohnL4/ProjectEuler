@@ -17,14 +17,39 @@ sumPandigitalProducts =
 
 panDigitalTriples = [(x, y, x*y)
                     | x <- candidateMultiplicandsInRange 1 maxSqrt,
-                      y <- candidateMultiplicandsInRange (floor (1e8/x)) (ceiling (1e9/x)),
+                      y <- candidateMultiplicandsInRange (fromIntegral $ floor (1e8/x)) (fromIntegral $ ceiling (1e9/x)),
                       panDigital $ (show x) ++ (show y) ++ (show (x*y))
                     ]
 
 -- | A list of all the candidate multiplicands between 'low' and 'high': all numbers with neither repeating digits nor
 -- zeros.
 candidateMultiplicandsInRange low high =
-  [1..10]                       -- TODO
+    takeWhile (< high) $ candidatesGreaterThanOrEqualTo low [1..9]
+    [1..10]                       -- TODO
+
+-- | List of numbers with unique digits greater than or equal to 'low', built using digits from 'availableDigits'
+candidatesGreaterThanOrEqualTo _ [] = []
+candidatesGreaterThanOrEqualTo
+  low
+  availableDigits               -- ^ Sorted (ascending) list of available digits in range [1..9]
+  =
+  let n = floor $ logBase 10 low
+      firstDigit = low `quot` 10^n
+      nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
+      bestAvailable = head $ dropWhile (< firstDigit) availableDigits
+      rest = takeWhile (< bestAvailable) availableDigits ++ dropWhile (<= bestAvailable) availableDigits
+  in
+    map                         -- Build a list of numbers starting with all digits that give us a value >= the current
+                                -- value, which means the first digit must be >= the first digit of the current (input)
+                                -- number
+    (\digit ->
+       map (digit * 10^n +) $
+       candidatesGreaterThanOrEqualTo
+       (low - firstDigit * 10^n) 
+       (fst $ break (==digit) availableDigits) ++ (tail $ snd $ break (==digit) availableDigits)
+       )
+    nextAvailable
+    
 
 -- | Return true iff x has no repeated digits AND no zeros.
 noRepeatedDigitsOrZeros s =
