@@ -17,7 +17,7 @@ sumPandigitalProducts =
 
 panDigitalTriples = [(x, y, x*y)
                     | x <- candidateMultiplicandsInRange 1 maxSqrt,
-                      y <- candidateMultiplicandsInRange (fromIntegral $ floor (1e8/x)) (fromIntegral $ ceiling (1e9/x)),
+                      y <- candidateMultiplicandsInRange (floor (1e8/(fromIntegral x))) (ceiling (1e9/(fromIntegral x))),
                       panDigital $ (show x) ++ (show y) ++ (show (x*y))
                     ]
 
@@ -25,30 +25,31 @@ panDigitalTriples = [(x, y, x*y)
 -- zeros.
 candidateMultiplicandsInRange low high =
     takeWhile (< high) $ candidatesGreaterThanOrEqualTo low [1..9]
-    [1..10]                       -- TODO
+    -- [1..10]                       -- TODO
 
 -- | List of numbers with unique digits greater than or equal to 'low', built using digits from 'availableDigits'
+candidatesGreaterThanOrEqualTo :: Integer -> [Integer] -> [Integer]
 candidatesGreaterThanOrEqualTo _ [] = []
 candidatesGreaterThanOrEqualTo
   low
   availableDigits               -- ^ Sorted (ascending) list of available digits in range [1..9]
-  =
-  let n = floor $ logBase 10 low
-      firstDigit = low `quot` 10^n
-      nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
-      bestAvailable = head $ dropWhile (< firstDigit) availableDigits
-      rest = takeWhile (< bestAvailable) availableDigits ++ dropWhile (<= bestAvailable) availableDigits
-  in
-    map                         -- Build a list of numbers starting with all digits that give us a value >= the current
-                                -- value, which means the first digit must be >= the first digit of the current (input)
-                                -- number
-    (\digit ->
-       map (digit * 10^n +) $
-       candidatesGreaterThanOrEqualTo
-       (low - firstDigit * 10^n) 
-       (fst $ break (==digit) availableDigits) ++ (tail $ snd $ break (==digit) availableDigits)
-       )
-    nextAvailable
+  | low < 10 = dropWhile (< low) availableDigits
+  | otherwise =
+    let n = floor $ logBase 10 $ fromIntegral low
+        firstDigit = low `quot` 10^n
+        nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
+    in
+      foldr (++) [] $             -- Fold a list of lists into a single list
+      map                         -- Build a list of lists of numbers starting with all digits that give us a value >=
+                                  -- the current value, which means the first digit must be >= the first digit of the
+                                  -- current (input) number
+      (\digit ->
+         map (digit * 10^n +) $
+        candidatesGreaterThanOrEqualTo
+        (low - firstDigit * 10^n) 
+        (fst $ break (==digit) availableDigits) ++ (tail $ snd $ break (==digit) availableDigits)
+      )
+      nextAvailable
     
 
 -- | Return true iff x has no repeated digits AND no zeros.
