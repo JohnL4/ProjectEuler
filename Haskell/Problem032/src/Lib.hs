@@ -33,11 +33,34 @@ candidatesGreaterThanOrEqualTo _ [] = []
 candidatesGreaterThanOrEqualTo
   low
   availableDigits               -- ^ Sorted (ascending) list of available digits in range [1..9]
+  =
+  (candidatesWithSameLeadingDigitButGreaterThanOrEqualTo low availableDigits)
+  ++
+  (candidatesWithLargerLeadingDigits low availableDigits)
+
+
+candidatesWithSameLeadingDigitButGreaterThanOrEqualTo
+  low
+  availableDigits
   | low < 10 = dropWhile (< low) availableDigits
   | otherwise =
     let n = floor $ logBase 10 $ fromIntegral low
         firstDigit = low `quot` 10^n
-        nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
+        nextAvailable = head $ dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
+    in
+      map (nextAvailable * 10^n +) $
+      candidatesGreaterThanOrEqualTo
+      (low - firstDigit * 10^n) 
+      (fst $ break (==nextAvailable) availableDigits) ++ (tail $ snd $ break (==nextAvailable) availableDigits)
+
+
+
+candidatesWithLargerLeadingDigits low availableDigits 
+  | low < 10 = dropWhile (< low) availableDigits
+  | otherwise =
+    let n = floor $ logBase 10 $ fromIntegral low
+        firstDigit = low `quot` 10^n
+        nextAvailable = dropWhile (<= firstDigit) availableDigits
     in
       foldr (++) [] $             -- Fold a list of lists into a single list
       map                         -- Build a list of lists of numbers starting with all digits that give us a value >=
@@ -50,7 +73,7 @@ candidatesGreaterThanOrEqualTo
         (fst $ break (==digit) availableDigits) ++ (tail $ snd $ break (==digit) availableDigits)
       )
       nextAvailable
-    
+
 
 -- | Return true iff x has no repeated digits AND no zeros.
 noRepeatedDigitsOrZeros s =
