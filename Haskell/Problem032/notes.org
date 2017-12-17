@@ -26,3 +26,48 @@ sqrt(1e9-1) is largest factor (is 31,623)
       &&
       9 == length $ freqDist x y
   #+END_SRC 
+
+* Pandigital candidates
+
+  (Where "pandigital" in this use means all digits are unique.)
+  
+** Sample data, in order
+
+   32451:
+   - itself, because it's pandigital
+   - 3245[6..9] -- all available digits left
+   - 324[6..9]... -- Use digits available (not already used) that are greater than input
+
+** More schematic
+
+*** vwxyz
+    
+   vwxyz--> [[v..9], [w..9]-[v], [x..9]-[v,w], etc.]
+
+   But that's only for the "first" iteration
+
+   --> v(w+1)(all possible digits), so cands v(w+1)000, I think
+
+*** vwvyv
+
+    vwvyv --> [[v..9]-[], [w..9]-[v], [v+1..9]-[w], [y..9]-[v,w], [v... *Note:* Once you get to the
+    (v+1) part, you're no longer in the "first" iteration
+
+    candsWithPrefixAndLength [] n [1..9] -- who needs the prefix?
+
+    candsWithLength n [availDigits] -- availDigits
+
+    candsGE x00 --> x01, x02, x03
+    --> candsGE 10
+    --> candsGE 1
+
+    #+BEGIN_EXAMPLE 
+    candsGeUsing x00 [digs] --> candsGeUsing 10 [digs]-[x] --> candsGeUsing 1 [digs]-[x]-[1]
+    #+END_EXAMPLE
+
+    candsGeUsing x00 [digs] = [x] ++ candsGeUsing 10 [digs]-[x] -- Actually "1" is lowest digits in
+    [digs], so, ~head digs~
+
+    vwxyz --> vwxyz, candsGEUsing vwxy(z+whatever is next) digs
+
+    [v,w,x] [y,z]

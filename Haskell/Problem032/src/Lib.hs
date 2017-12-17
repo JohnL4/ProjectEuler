@@ -3,6 +3,7 @@ module Lib
     ) where
 
 import Data.Map.Strict as Map (empty, toList, insertWith)
+import Data.List
 
 maxSqrt :: Integer
 maxSqrt = ceiling $ sqrt 1e9
@@ -33,10 +34,97 @@ candidatesGreaterThanOrEqualTo _ [] = []
 candidatesGreaterThanOrEqualTo
   low
   availableDigits               -- ^ Sorted (ascending) list of available digits in range [1..9]
+{-
+32415 [1..9] --> itself, 3241[6..9], cands 32450 [1,6..9], cands 32460 [1,5,7,8,9]
+-}
+  | low < 10 = dropWhile (< low) availableDigits
+  | otherwise =
+    let n = floor $ logBase 10 $ fromIntegral low
+        firstDigit = low `quot` 10^n
+        nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
+    in
+      []
+
+-- | Utility to return the digits of n as a sequence (most-significant digit first)
+numToDigits :: Integer -> [Integer]
+numToDigits n
+  | n < 10 = [n]
+  | otherwise = f:(numToDigits $ n-f*10^d)
+  where
+    d = floor $ logBase 10 $ fromIntegral n
+    f = n `quot` (10^d)
+
+-- | Utility to return the number represented by the sequence of digits (most-significant digit first)
+digitsToNum digits
+  = foldl' (\t d -> 10*t + d) 0 digits -- Note foldl' instead of foldr, because we want to evaluate for the leftmost
+    -- digit first (foldr will evaluate for the rightmost digit first, using right-associative application of the
+    -- function given).
+
+numsStartingWith n allowed
+  =
+  map digitsToNum
+  $ seqStartingWith (numToDigits n) allowed
+
+-- | Returns the smallest number consisting of unique digits greater than or equal to 'n'
+smallestUniqueGE n
+  =  digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9]
+
+-- | Returns the smallest sequence consisting of unique digits greater than or equal to its first argument, and whose
+-- digits from the list of allowed digits.
+smallestUniqueSeqGE [] _ = []
+smallestUniqueSeqGE (digit:digits) allowed
+  = allowedDigit : smallestUniqueSeqGE digits (allowed \\ [allowedDigit])
+  where
+    allowedDigit = head $ dropWhile (\d -> not $ elem d allowed) [digit..9]
+
+-- | Sequences of digits starting w/the lowest unique one above 'seed' and continuing upward but having the same length
+-- as 'initial'
+seqStartingWith :: [Integer] -> [Integer] -> [[Integer]]
+seqStartingWith [d] allowed = map (\x -> [x]) $ dropWhile (<d) allowed
+seqStartingWith
+  initial                       -- Initial "seed"
+  allowed                       -- Allowed digits
+  =
+  (map (head initial :) $ seqStartingWith (tail initial) (allowed \\ ([head initial])))
+  ++
+  (flatten1
+   $ map (\d -> map (d :)
+           $ seqStartingWith
+           (take ((length initial) - 1) (repeat 1))
+           (allowed \\ ([d])))
+    (dropWhile (<= (head initial)) allowed))
+
+-- | Utility to flatten a list of lists exactly one level
+flatten1 :: [[a]] -> [a]
+flatten1 as = foldr (++) [] as
+
+{-
+-- | Return a sequence consisting of the head of the input list followed by zeros, having the same length as the
+-- original sequence.
+zeroRest :: Num a => [a] -> [a]
+zeroRest [] = []
+zeroRest (a:as) = a : take (length as) (repeat 0)
+-}
+
+-- | Return a sequence of sequences having the same length as the input sequence but corresponding to numbers greater
+-- than or equal to the number represented by the input sequence
+-- seqSameLengthFromArbitrary digs = seqSameLengthFromUnique $ unique digs $ [1..9] \\ TODO
+
+
+
+
+
+  
+
+
+
+{-
   =
   (candidatesWithSameLeadingDigitButGreaterThanOrEqualTo low availableDigits)
   ++
   (candidatesWithLargerLeadingDigits low availableDigits)
+-}
+
 
 
 candidatesWithSameLeadingDigitButGreaterThanOrEqualTo
