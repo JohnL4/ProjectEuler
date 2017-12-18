@@ -1,5 +1,7 @@
 module Lib
     ( sumPandigitalProducts, panDigitalTriples
+      -- unit test:
+    ,numToDigits, digitsToNum, smallestUniqueGE, flatten1
     ) where
 
 import Data.Map.Strict as Map (empty, toList, insertWith)
@@ -70,12 +72,16 @@ smallestUniqueGE n
   =  digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9]
 
 -- | Returns the smallest sequence consisting of unique digits greater than or equal to its first argument, and whose
--- digits from the list of allowed digits.
+-- digits are from the list of allowed digits.
+smallestUniqueSeqGE :: [Integer] -> [Integer] -> [Integer]
 smallestUniqueSeqGE [] _ = []
 smallestUniqueSeqGE (digit:digits) allowed
-  = allowedDigit : smallestUniqueSeqGE digits (allowed \\ [allowedDigit])
+  =
+  if (null allowedDigits)
+  then take ((length (digit:digits))+1) [1..9]
+  else head allowedDigits : smallestUniqueSeqGE digits (allowed \\ [head allowedDigits])
   where
-    allowedDigit = head $ dropWhile (\d -> not $ elem d allowed) [digit..9]
+    allowedDigits = dropWhile (\d -> not $ elem d allowed) [digit..9]
 
 -- | Sequences of digits starting w/the lowest unique one above 'seed' and continuing upward but having the same length
 -- as 'initial'
