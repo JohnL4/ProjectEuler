@@ -77,11 +77,14 @@ smallestUniqueSeqGE :: [Integer] -> [Integer] -> [Integer]
 smallestUniqueSeqGE [] _ = []
 smallestUniqueSeqGE (digit:digits) allowed
   =
-  if (null allowedDigits)
+  if (null allowedDigits || length subseq > length digits)
+  -- Unexpected length ==> had to carry a one ==> can't just tack on computed "next" to existing digits ==> just
+  -- compute a new "next".
   then take ((length (digit:digits))+1) [1..9]
-  else head allowedDigits : smallestUniqueSeqGE digits (allowed \\ [head allowedDigits])
+  else head allowedDigits : subseq
   where
     allowedDigits = dropWhile (\d -> not $ elem d allowed) [digit..9]
+    subseq = smallestUniqueSeqGE digits (allowed \\ [head allowedDigits])
 
 -- | Sequences of digits starting w/the lowest unique one above 'seed' and continuing upward but having the same length
 -- as 'initial'
