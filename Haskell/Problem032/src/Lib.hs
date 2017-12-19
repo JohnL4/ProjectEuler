@@ -1,7 +1,7 @@
 module Lib
     ( sumPandigitalProducts, panDigitalTriples
       -- unit test:
-    ,numToDigits, digitsToNum, smallestUniqueGE, flatten1
+    , numToDigits, digitsToNum, smallestUniqueGE, flatten1, candidatesGreaterThanOrEqualTo
     ) where
 
 import Data.Map.Strict as Map (empty, toList, insertWith)
@@ -27,18 +27,17 @@ panDigitalTriples = [(x, y, x*y)
 -- | A list of all the candidate multiplicands between 'low' and 'high': all numbers with neither repeating digits nor
 -- zeros.
 candidateMultiplicandsInRange low high =
-    takeWhile (< high) $ candidatesGreaterThanOrEqualTo low [1..9]
+    takeWhile (< high) $ candidatesGreaterThanOrEqualTo low
     -- [1..10]                       -- TODO
 
 -- | List of numbers with unique digits greater than or equal to 'low', built using digits from 'availableDigits'
-candidatesGreaterThanOrEqualTo :: Integer -> [Integer] -> [Integer]
-candidatesGreaterThanOrEqualTo _ [] = []
-candidatesGreaterThanOrEqualTo
-  low
-  availableDigits               -- ^ Sorted (ascending) list of available digits in range [1..9]
+candidatesGreaterThanOrEqualTo :: Integer -> [Integer]
+candidatesGreaterThanOrEqualTo low =
+  smallestUniqueGE low : (candidatesGreaterThanOrEqualTo $ smallestUniqueGE low + 1)
+  
+
+
 {-
-32415 [1..9] --> itself, 3241[6..9], cands 32450 [1,6..9], cands 32460 [1,5,7,8,9]
--}
   | low < 10 = dropWhile (< low) availableDigits
   | otherwise =
     let n = floor $ logBase 10 $ fromIntegral low
@@ -46,6 +45,7 @@ candidatesGreaterThanOrEqualTo
         nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
     in
       []
+-}
 
 -- | Utility to return the digits of n as a sequence (most-significant digit first)
 numToDigits :: Integer -> [Integer]
@@ -62,10 +62,12 @@ digitsToNum digits
     -- digit first (foldr will evaluate for the rightmost digit first, using right-associative application of the
     -- function given).
 
+{-
 numsStartingWith n allowed
   =
   map digitsToNum
   $ seqStartingWith (numToDigits n) allowed
+-}
 
 -- | Returns the smallest number consisting of unique digits greater than or equal to 'n'
 smallestUniqueGE n
@@ -135,7 +137,7 @@ zeroRest (a:as) = a : take (length as) (repeat 0)
 -}
 
 
-
+{-
 candidatesWithSameLeadingDigitButGreaterThanOrEqualTo
   low
   availableDigits
@@ -170,7 +172,7 @@ candidatesWithLargerLeadingDigits low availableDigits
         (fst $ break (==digit) availableDigits) ++ (tail $ snd $ break (==digit) availableDigits)
       )
       nextAvailable
-
+-}
 
 -- | Return true iff x has no repeated digits AND no zeros.
 noRepeatedDigitsOrZeros s =

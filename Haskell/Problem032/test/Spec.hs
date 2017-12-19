@@ -29,4 +29,18 @@ main = hspec $ do
       flatten1 [[1,2,3]] `shouldBe` [1,2,3]
     it "returns [4,5,6] for [[4],[5],[6]]" $ do
       flatten1 [[4],[5],[6]] `shouldBe` [4,5,6]
-                
+
+  describe "candidatesGreaterThanOrEqualTo" $ do
+    it "first 3 of 1 --> [1,2,3]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 1) `shouldBe` [1,2,3]
+    it "first 3 of 9 --> [9, 12, 13]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 9) `shouldBe` [9,12,13]
+    it "first 3 of 88 --> [89,91,92]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 88) `shouldBe` [89,91,92]
+    it "first 3 of 99 --> [123,124,125]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 99) `shouldBe` [123,124,125]
+    it "first 3 of 829 --> [829, 831, 832]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 829) `shouldBe` [829, 831, 832]
+    it "first 3 of 329 --> [329, 341, 342]" $ do
+      take 3 (candidatesGreaterThanOrEqualTo 329) `shouldBe` [329, 341, 342]
+      
