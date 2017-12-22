@@ -17,12 +17,14 @@ main = hspec $ do
       smallestUniqueGE 867 `shouldBe` 867
     it "868 --> 869" $ do
       smallestUniqueGE 868 `shouldBe` 869
-    it "888 --> 1234" $ do
-      smallestUniqueGE 888 `shouldBe` 1234
+    it "888 --> 891" $ do
+      smallestUniqueGE 888 `shouldBe` 891
     it "999 --> 1234" $ do
       smallestUniqueGE 999 `shouldBe` 1234
     it "777 --> 789" $ do
       smallestUniqueGE 777 `shouldBe` 789
+    it "199 --> 213" $ do
+      smallestUniqueGE 199 `shouldBe` 213
       
   describe "flatten1" $ do
     it "returns [1,2,3] for [[1,2,3]]" $ do

@@ -6,6 +6,7 @@ module Lib
 
 import Data.Map.Strict as Map (empty, toList, insertWith)
 import Data.List
+import Debug.Trace
 
 maxSqrt :: Integer
 maxSqrt = ceiling $ sqrt 1e9
@@ -32,6 +33,7 @@ candidateMultiplicandsInRange low high =
 
 -- | List of numbers with unique digits greater than or equal to 'low', built using digits from 'availableDigits'
 candidatesGreaterThanOrEqualTo :: Integer -> [Integer]
+candidatesGreaterThanOrEqualTo low | trace ("candidatesGreaterThanOrEqualTo " ++ show low) False = undefined
 candidatesGreaterThanOrEqualTo low =
   smallestUniqueGE low : (candidatesGreaterThanOrEqualTo $ smallestUniqueGE low + 1)
   
@@ -70,19 +72,29 @@ numsStartingWith n allowed
 -}
 
 -- | Returns the smallest number consisting of unique digits greater than or equal to 'n'
-smallestUniqueGE n
-  =  digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9]
+smallestUniqueGE n =
+  if (n > smallest)
+  then smallestUniqueGE (n+1)
+  else smallest
+  where smallest = digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9]
 
 -- | Returns the smallest sequence consisting of unique digits greater than or equal to its first argument, and whose
 -- digits are from the list of allowed digits.
 smallestUniqueSeqGE :: [Integer] -> [Integer] -> [Integer]
-smallestUniqueSeqGE [] _ = []
+-- smallestUniqueSeqGE [] _ = trace "smallestUniqueSeqGE [] _" []
+smallestUniqueSeqGE (digit:[]) allowed | trace ("smallestUniqueSeqGE (" ++ show digit ++ ":[]) " ++ show allowed) False = undefined
+smallestUniqueSeqGE (digit:[]) allowed =
+  if 0 == (length $ dropWhile (<= digit) allowed)
+  then [1,0]
+  else [head $ dropWhile (<= digit) allowed]
+smallestUniqueSeqGE a b | trace ("smallestUniqueSeqGE " ++ show a ++ " " ++ show b) False = undefined
 smallestUniqueSeqGE (digit:digits) allowed
   =
-  if (null allowedDigits || length subseq > length digits)
+  if (null allowedDigits || length subseq > length digits || head subseq < head digits)
   -- Unexpected length ==> had to carry a one ==> can't just tack on computed "next" to existing digits ==> just
   -- compute a new "next".
-  then take ((length (digit:digits))+1) [1..9]
+  -- then take ((length (digit:digits))+1) [1..9]
+  then smallestUniqueSeqGE (numToDigits (digitsToNum (digit:digits) + 1)) allowed
   else head allowedDigits : subseq
   where
     allowedDigits = dropWhile (\d -> not $ elem d allowed) [digit..9]
