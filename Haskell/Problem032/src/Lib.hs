@@ -32,22 +32,12 @@ candidateMultiplicandsInRange low high =
     -- [1..10]                       -- TODO
 
 -- | List of numbers with unique digits greater than or equal to 'low', built using digits from 'availableDigits'
-candidatesGreaterThanOrEqualTo :: Integer -> [Integer]
+-- candidatesGreaterThanOrEqualTo :: Integer -> Maybe [Integer]
 candidatesGreaterThanOrEqualTo low | trace ("candidatesGreaterThanOrEqualTo " ++ show low) False = undefined
 candidatesGreaterThanOrEqualTo low =
-  smallestUniqueGE low : (candidatesGreaterThanOrEqualTo $ smallestUniqueGE low + 1)
-  
-
-
-{-
-  | low < 10 = dropWhile (< low) availableDigits
-  | otherwise =
-    let n = floor $ logBase 10 $ fromIntegral low
-        firstDigit = low `quot` 10^n
-        nextAvailable = dropWhile (< firstDigit) availableDigits -- Candidates for use in the current ("next") digit
-    in
-      []
--}
+  case smallestUniqueGE low of
+    Just smallest -> smallest : candidatesGreaterThanOrEqualTo (smallest + 1)
+    Nothing -> []
 
 -- | Utility to return the digits of n as a sequence (most-significant digit first)
 numToDigits :: Integer -> [Integer]
@@ -72,21 +62,26 @@ numsStartingWith n allowed
 -}
 
 -- | Returns the smallest number consisting of unique digits greater than or equal to 'n'
+smallestUniqueGE :: Integer -> Maybe Integer
 smallestUniqueGE n =
+  if n < 987654321
+  then Just (digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9])
+  else Nothing
+{-
   if (n > smallest)
   then smallestUniqueGE (n+1)
   else smallest
   where smallest = digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9]
-
+-}
+  
 -- | Returns the smallest sequence consisting of unique digits greater than or equal to its first argument, and whose
 -- digits are from the list of allowed digits.
 smallestUniqueSeqGE :: [Integer] -> [Integer] -> [Integer]
--- smallestUniqueSeqGE [] _ = trace "smallestUniqueSeqGE [] _" []
 smallestUniqueSeqGE (digit:[]) allowed | trace ("smallestUniqueSeqGE (" ++ show digit ++ ":[]) " ++ show allowed) False = undefined
 smallestUniqueSeqGE (digit:[]) allowed =
-  if 0 == (length $ dropWhile (<= digit) allowed)
+  if 0 == (length $ dropWhile (< digit) allowed)
   then [1,0]
-  else [head $ dropWhile (<= digit) allowed]
+  else [head $ dropWhile (< digit) allowed]
 smallestUniqueSeqGE a b | trace ("smallestUniqueSeqGE " ++ show a ++ " " ++ show b) False = undefined
 smallestUniqueSeqGE (digit:digits) allowed
   =
