@@ -85,7 +85,8 @@ smallestUniqueGE n =
 -- will return Nothing.
 smallestUniqueSeqGE ::
   [Integer]                     -- ^ "Seed" sequence
-  -> [Integer]                  -- ^ List of digits that are allowed to comprise the return value
+  -> [Integer]                  -- ^ List of digits that are allowed to comprise the return value (note that the first
+                                -- digit is automatically allow)
   -> Maybe [Integer]            -- ^ Nothing ==> couldn't find a number meeting the requirements
 
 smallestUniqueSeqGE (digit:[]) allowed | trace ("smallestUniqueSeqGE (" ++ show digit ++ ":[]) " ++ show allowed) False = undefined
@@ -104,7 +105,7 @@ smallestUniqueSeqGE (digit:digits) allowed =
   where
     subseqs =                   -- ^ List of all possible subsequences (of (digit:digits))
       filter (/= Nothing) $     -- /= ?
-      map (\nextDigit -> smallestUniqueSeqGE (nextDigit : tail digits) ((allowed \\ [digit]) \\ [nextDigit])
+      map (\nextDigit -> smallestUniqueSeqGE (nextDigit : tail digits) (allowed \\ [digit])
                 
                      )
               -- Candidate next digits are all those >= allowed digits less the leading digit.
