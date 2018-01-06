@@ -65,8 +65,14 @@ numsStartingWith n allowed
 smallestUniqueGE :: Integer -> Maybe Integer
 smallestUniqueGE n =
   if n < 987654321
-  then Just (digitsToNum $ smallestUniqueSeqGE (numToDigits n) [1..9])
+  then case smallestSeq of
+    Nothing ->
+      if (length $ numToDigits n) < 9
+      then {- add an extra digit -} Just $ digitsToNum $ take ((length $ numToDigits n) + 1) [1..9]
+      else Nothing
+    Just s  -> Just (digitsToNum s)
   else Nothing
+  where smallestSeq = smallestUniqueSeqGE (numToDigits n) ([1..9] \\ [head $ numToDigits n])
 {-
   if (n > smallest)
   then smallestUniqueGE (n+1)
@@ -75,16 +81,46 @@ smallestUniqueGE n =
 -}
   
 -- | Returns the smallest sequence consisting of unique digits greater than or equal to its first argument, and whose
--- digits are from the list of allowed digits.
-smallestUniqueSeqGE :: [Integer] -> [Integer] -> [Integer]
+-- digits are from the list of allowed digits.  If there is no such sequence of the same length as the input sequence,
+-- will return Nothing.
+smallestUniqueSeqGE ::
+  [Integer]                     -- ^ "Seed" sequence
+  -> [Integer]                  -- ^ List of digits that are allowed to comprise the return value
+  -> Maybe [Integer]            -- ^ Nothing ==> couldn't find a number meeting the requirements
+
 smallestUniqueSeqGE (digit:[]) allowed | trace ("smallestUniqueSeqGE (" ++ show digit ++ ":[]) " ++ show allowed) False = undefined
 smallestUniqueSeqGE (digit:[]) allowed =
   if 0 == (length $ dropWhile (< digit) allowed)
-  then [1,0]
-  else [head $ dropWhile (< digit) allowed]
+  then Nothing
+  else Just [head $ dropWhile (< digit) allowed]
+
 smallestUniqueSeqGE a b | trace ("smallestUniqueSeqGE " ++ show a ++ " " ++ show b) False = undefined
-smallestUniqueSeqGE (digit:digits) allowed
-  =
+smallestUniqueSeqGE (digit:digits) allowed =
+  if null subseqs
+  then Nothing
+  else case (head subseqs) of
+    Nothing -> Nothing
+    Just s  -> Just (digit : s)
+  where
+    subseqs =                   -- ^ List of all possible subsequences (of (digit:digits))
+      filter (/= Nothing) $     -- /= ?
+      map (\nextDigit -> smallestUniqueSeqGE (nextDigit : tail digits) ((allowed \\ [digit]) \\ [nextDigit])
+                
+                     )
+              -- Candidate next digits are all those >= allowed digits less the leading digit.
+              $ dropWhile (< head digits) $ allowed \\ [digit]
+  
+
+
+{-
+                if elem $ head digits $ allowed \\ digit
+  then case subseq of
+    Just ds -> digit : subseq 
+  where
+    subseq = 
+-}
+
+{-
   if (null allowedDigits || length subseq > length digits || head subseq < head digits)
   -- Unexpected length ==> had to carry a one ==> can't just tack on computed "next" to existing digits ==> just
   -- compute a new "next".
@@ -94,7 +130,8 @@ smallestUniqueSeqGE (digit:digits) allowed
   where
     allowedDigits = dropWhile (\d -> not $ elem d allowed) [digit..9]
     subseq = smallestUniqueSeqGE digits (allowed \\ [head allowedDigits])
-
+-}
+      
 -- | Sequences of digits starting w/the lowest unique one above 'seed' and continuing upward but having the same length
 -- as 'initial'
 seqStartingWith :: [Integer] -> [Integer] -> [[Integer]]
