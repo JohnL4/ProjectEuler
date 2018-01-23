@@ -97,19 +97,26 @@ smallestUniqueSeqGE (digit:[]) allowed =
 
 smallestUniqueSeqGE a b | trace ("smallestUniqueSeqGE " ++ show a ++ " " ++ show b) False = undefined
 smallestUniqueSeqGE (digit:digits) allowed =
-  if null subseqs
-  then Nothing
-  else case (head subseqs) of
-    Nothing -> Nothing
-    Just s  -> Just (digit : s)
-  where
-    subseqs =                   -- ^ List of all possible subsequences (of (digit:digits))
-      filter (/= Nothing) $     -- /= ?
-      map (\nextDigit -> smallestUniqueSeqGE (nextDigit : tail digits) (allowed \\ [digit])
-                
-                     )
-              -- Candidate next digits are all those >= allowed digits less the leading digit.
-              $ dropWhile (< head digits) $ allowed \\ [digit]
+  if (noRepeatedDigitsOrZeros (digit:digits) 0)
+  then Just (digit:digits)
+  else
+    if null subseqs
+    then Nothing
+    else case (head subseqs) of
+      Nothing -> Nothing          -- Should never happen, since we should have already filtered all the Nothings out,
+                                  -- below. 
+      Just s  -> Just (digit : s)
+    where
+      subseqs =                   -- ^ List of all possible sequences starting with digits (Note: 8:[8,8] -> [9,1])
+        filter (/= Nothing) $
+        -- This isn't right. We should check to see if current subseq is unique, and, if so, return it.  Otherwise, return
+        -- take n allowed where n is the length of current subseq (or some such -- need to make sure first digit is bigger
+        -- than current first digit).
+        map (\nextDigit -> smallestUniqueSeqGE (nextDigit : tail digits) (allowed \\ [digit])
+
+                       )
+                -- Candidate next digits are all those >= allowed digits less the leading digit.
+                $ dropWhile (< head digits) $ allowed \\ [digit]
   
 
 
@@ -219,21 +226,25 @@ candidatesWithLargerLeadingDigits low availableDigits
       nextAvailable
 -}
 
--- | Return true iff x has no repeated digits AND no zeros.
-noRepeatedDigitsOrZeros s =
+-- | Return true iff sequence has no repeated digits AND no zeros (i.e., no element equal to 'disallowed').
+-- noRepeatedDigitsOrZeros :: [Integer] -> Boolean
+noRepeatedDigitsOrZeros
+  s                             -- Sequence to be checked
+  disallowed                    -- The element we're not allowing, either 0 or '0'.
+  =
   (foldr (&&) True $ map (1 ==) $ map snd $ freqDist s)
   &&
-  (not $ elem '0' $ map fst $ freqDist s)
+  (not $ elem disallowed $ map fst $ freqDist s)
 
 -- | Return true iff the given string is pandigital (has each of the digits 1-9 exactly once).
 panDigital s =
-  noRepeatedDigitsOrZeros s
+  noRepeatedDigitsOrZeros s '0'
   &&
   length s == 9
 
 -- | Frequency distribution of digits in single number s in form [(d,n)...], where d is digit in range [0..9] and n is
 -- count of occurrence of digit.
-freqDist :: String -> [(Char,Integer)]
+-- freqDist :: String -> [(Char,Integer)]
 freqDist s =
   Map.toList $
   foldr (\ digit map -> Map.insertWith (+) digit 1 map) Map.empty $
