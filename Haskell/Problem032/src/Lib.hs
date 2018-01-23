@@ -86,7 +86,7 @@ smallestUniqueGE n =
 smallestUniqueSeqGE ::
   [Integer]                     -- ^ "Seed" sequence
   -> [Integer]                  -- ^ List of digits that are allowed to comprise the return value (note that the first
-                                -- digit is automatically allow)
+                                -- digit is automatically allowed)
   -> Maybe [Integer]            -- ^ Nothing ==> couldn't find a number meeting the requirements
 
 smallestUniqueSeqGE (digit:[]) allowed | trace ("smallestUniqueSeqGE (" ++ show digit ++ ":[]) " ++ show allowed) False = undefined
@@ -96,8 +96,8 @@ smallestUniqueSeqGE (digit:[]) allowed =
   else Just [head $ dropWhile (< digit) allowed]
 
 smallestUniqueSeqGE a b | trace ("smallestUniqueSeqGE " ++ show a ++ " " ++ show b) False = undefined
-smallestUniqueSeqGE (digit:digits) allowed =
-  if (noRepeatedDigitsOrZeros (digit:digits) 0)
+smallestUniqueSeqGE ds@(digit:digits) allowed =
+  if (noRepeatedDigitsOrZeros ds 0) && (allAllowed ds allowed)
   then Just (digit:digits)
   else
     if null subseqs
@@ -117,8 +117,12 @@ smallestUniqueSeqGE (digit:digits) allowed =
                        )
                 -- Candidate next digits are all those >= allowed digits less the leading digit.
                 $ dropWhile (< head digits) $ allowed \\ [digit]
-  
 
+allAllowed (d:[]) allowed =
+  elem d allowed
+  
+allAllowed (d:ds) allowed =
+  allAllowed ds (allowed \\ [d])
 
 {-
                 if elem $ head digits $ allowed \\ digit
